@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: petclinic
+  labels:
+    app: petclinic
+spec:
+  replicas: 4
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: petclinic
+  template:
+    metadata:
+      labels:
+        app: petclinic
+    spec:
+      containers:
+      - name: petclinic
+        image: springcommunity/spring-petclinic-rest:3.2.1
+        ports:
+        - containerPort: 9966
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: petclinic
+spec:
+  selector:
+    app: petclinic
+  ports:
+  - port: 80
+    targetPort: 9966
+  type: ClusterIP
